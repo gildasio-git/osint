@@ -151,3 +151,735 @@ O Ciclo da Inteligência
 - Análise
 - Disseminação
 - Feedback
+
+---
+title: "Shell Script para OSINT com Linux"
+subtitle: "Automação da Inteligência de Fontes Abertas utilizando Bash"
+volume: "Volume I - Fundamentos"
+chapter: 2
+chapter_title: "O Ciclo da Inteligência"
+author: "Gildásio Brito"
+version: "0.1"
+---
+
+# Capítulo 2
+
+# O Ciclo da Inteligência
+
+> "A inteligência não nasce da quantidade de dados coletados, mas da qualidade da análise realizada."
+
+---
+
+# Objetivos
+
+Ao concluir este capítulo o leitor será capaz de:
+
+- compreender o conceito do Ciclo da Inteligência;
+- identificar cada uma das suas etapas;
+- compreender sua aplicação em atividades de OSINT;
+- entender como a automação pode otimizar cada fase;
+- iniciar o desenvolvimento de uma metodologia estruturada para investigações.
+
+---
+
+# Introdução
+
+Toda investigação começa com uma necessidade de informação.
+
+Imagine que uma organização deseje conhecer todos os seus ativos públicos expostos na Internet.
+
+Responder a essa pergunta exige muito mais do que executar algumas consultas DNS ou WHOIS. É necessário seguir um processo estruturado, capaz de transformar dados dispersos em inteligência útil.
+
+Esse processo é conhecido como **Ciclo da Inteligência**.
+
+---
+
+# 2.1 O que é o Ciclo da Inteligência?
+
+O Ciclo da Inteligência é uma metodologia utilizada para transformar necessidades de informação em conhecimento capaz de apoiar decisões.
+
+Embora existam diferentes modelos, todos possuem uma sequência lógica de atividades.
+
+Fluxo simplificado:
+
+```text
+Planejamento
+      │
+      ▼
+Coleta
+      │
+      ▼
+Processamento
+      │
+      ▼
+Análise
+      │
+      ▼
+Disseminação
+      │
+      ▼
+Feedback
+      │
+      └──────────────┐
+                     │
+                     ▼
+              Novo Planejamento
+```
+
+Observe que o processo é contínuo.
+
+O feedback gera novos requisitos de inteligência, reiniciando o ciclo.
+
+---
+
+# 2.2 Planejamento
+
+Toda investigação deve começar com uma pergunta clara.
+
+Essa pergunta é chamada de **Requisito de Inteligência**.
+
+Sem planejamento, corre-se o risco de coletar milhares de informações irrelevantes.
+
+## Exemplos
+
+Em vez de perguntar:
+
+> Pesquisar uma empresa.
+
+Defina perguntas específicas:
+
+- Quais domínios pertencem à empresa?
+- Quais IPs estão associados?
+- Existem subdomínios esquecidos?
+- Há serviços expostos?
+- Quais tecnologias são utilizadas?
+- Existem certificados digitais públicos?
+- Existem repositórios públicos relacionados?
+
+Quanto mais específico o objetivo, maior será a qualidade da inteligência produzida.
+
+---
+
+## Boas práticas
+
+Antes de iniciar uma investigação, responda:
+
+- Qual problema desejo resolver?
+- Quem utilizará o relatório?
+- Quais fontes serão consultadas?
+- Qual será o prazo?
+- Existem restrições legais?
+- Quais ferramentas serão utilizadas?
+
+---
+
+# 2.3 Coleta
+
+Após definir o objetivo, inicia-se a coleta.
+
+Nesta etapa são obtidas informações provenientes de diversas fontes abertas.
+
+Exemplos:
+
+| Fonte | Informações |
+|--------|-------------|
+| DNS | Registros A, AAAA, MX, TXT |
+| WHOIS | Dados do domínio |
+| TLS | Certificados |
+| APIs | Dados estruturados |
+| GitHub | Repositórios |
+| Redes sociais | Perfis públicos |
+| PDFs | Metadados |
+| Wayback Machine | Histórico de páginas |
+
+A coleta deve ser objetiva e direcionada aos requisitos definidos durante o planejamento.
+
+---
+
+# Automatizando a coleta
+
+Uma investigação raramente envolve apenas um domínio.
+
+Frequentemente é necessário consultar dezenas ou centenas de ativos.
+
+É nesse momento que Shell Script se torna indispensável.
+
+Exemplo:
+
+```bash
+#!/bin/bash
+
+while read dominio
+do
+    echo "Consultando $dominio"
+    dig +short "$dominio"
+done < dominios.txt
+```
+
+Embora simples, esse script demonstra como automatizar uma tarefa repetitiva.
+
+Ao longo do livro evoluiremos esse exemplo para um framework completo.
+
+---
+
+# 2.4 Processamento
+
+A coleta produz grande quantidade de dados.
+
+Esses dados normalmente apresentam:
+
+- duplicidades;
+- formatos diferentes;
+- inconsistências;
+- registros desnecessários.
+
+O processamento tem como objetivo organizar essas informações.
+
+Ferramentas importantes:
+
+- grep
+- awk
+- sed
+- sort
+- uniq
+- cut
+- tr
+- jq
+
+Exemplo:
+
+```bash
+cat dominios.txt | sort | uniq
+```
+
+Esse comando remove entradas duplicadas.
+
+---
+
+# 2.5 Análise
+
+Esta é a etapa mais importante do ciclo.
+
+Coletar milhares de informações não produz inteligência.
+
+A inteligência surge quando os dados são interpretados.
+
+Durante a análise procura-se responder perguntas como:
+
+- Existe um padrão?
+- Existem inconsistências?
+- Existem riscos?
+- Existe exposição desnecessária?
+- Existem oportunidades de melhoria?
+
+A análise depende de conhecimento técnico e pensamento crítico.
+
+---
+
+# 2.6 Disseminação
+
+Depois da análise, os resultados precisam ser apresentados.
+
+O produto final pode assumir diferentes formatos:
+
+- relatório técnico;
+- dashboard;
+- planilha;
+- PDF;
+- HTML;
+- JSON;
+- CSV.
+
+Uma boa disseminação deve considerar o público-alvo.
+
+Um gestor normalmente necessita de conclusões e riscos.
+
+Um analista técnico pode necessitar de detalhes completos.
+
+---
+
+# 2.7 Feedback
+
+O ciclo não termina após a entrega do relatório.
+
+O cliente poderá solicitar:
+
+- atualização dos dados;
+- novas consultas;
+- aprofundamento da investigação;
+- inclusão de novas fontes.
+
+Esse retorno gera um novo planejamento.
+
+Por isso o Ciclo da Inteligência é considerado um processo contínuo.
+
+---
+
+# Aplicação em OSINT
+
+Durante este livro utilizaremos esse ciclo continuamente.
+
+Exemplo:
+
+Planejamento
+
+↓
+
+Definir o domínio
+
+↓
+
+Coleta
+
+↓
+
+WHOIS
+
+↓
+
+DNS
+
+↓
+
+Subdomínios
+
+↓
+
+HTTP
+
+↓
+
+TLS
+
+↓
+
+Processamento
+
+↓
+
+Organização dos dados
+
+↓
+
+Análise
+
+↓
+
+Correlação
+
+↓
+
+Relatório
+
+↓
+
+Feedback
+
+↓
+
+Nova investigação
+
+---
+
+# Laboratório 1
+
+## Objetivo
+
+Compreender como o planejamento influencia a coleta.
+
+### Exercício
+
+Escolha um domínio público.
+
+Liste:
+
+- objetivo da investigação;
+- perguntas que deseja responder;
+- possíveis fontes abertas;
+- ferramentas Linux que poderão ser utilizadas.
+
+Não execute nenhuma consulta ainda.
+
+Apenas planeje.
+
+---
+
+# Resumo
+
+Neste capítulo estudamos o Ciclo da Inteligência.
+
+Aprendemos que inteligência é resultado de um processo estruturado composto por:
+
+- Planejamento;
+- Coleta;
+- Processamento;
+- Análise;
+- Disseminação;
+- Feedback.
+
+Também vimos que Bash será utilizado ao longo do livro para automatizar grande parte dessas atividades.
+
+---
+
+# Exercícios
+
+1. Explique a diferença entre coleta e análise.
+
+2. Por que planejamento é importante?
+
+3. Cite cinco fontes abertas.
+
+4. O que caracteriza inteligência?
+
+5. Qual a importância do feedback?
+
+---
+
+# Desafio
+
+Escolha uma organização pública.
+
+Sem utilizar ferramentas automáticas, elabore um plano de investigação contendo:
+
+- objetivo;
+- perguntas;
+- possíveis fontes;
+- limitações;
+- produto esperado.
+
+Esse planejamento será utilizado em capítulos futuros.
+
+---
+
+## Capítulo 3
+
+---
+title: "Shell Script para OSINT com Linux"
+subtitle: "Automação da Inteligência de Fontes Abertas utilizando Bash"
+volume: "Volume I - Fundamentos"
+chapter: 3
+chapter_title: "Linux para OSINT"
+author: "Gildásio Brito"
+version: "0.1"
+---
+
+# Capítulo 3
+
+# Linux para OSINT
+
+> "O sistema operacional é a base sobre a qual toda a investigação será construída."
+
+---
+
+# Objetivos
+
+Ao concluir este capítulo, o leitor será capaz de:
+
+- compreender por que o Linux é amplamente utilizado em atividades de OSINT;
+- conhecer as principais distribuições voltadas para segurança da informação;
+- entender a filosofia Unix e sua relação com a automação;
+- identificar as ferramentas nativas mais importantes para coleta e manipulação de dados;
+- preparar uma estação de trabalho para os próximos capítulos.
+
+---
+
+# Introdução
+
+Grande parte das ferramentas modernas de OSINT foi desenvolvida originalmente para sistemas baseados em Linux. Embora muitas delas também estejam disponíveis para Windows e macOS, é no Linux que elas apresentam maior integração, flexibilidade e facilidade de automação.
+
+Isso não acontece por acaso.
+
+O Linux foi projetado com uma filosofia simples e extremamente poderosa: construir pequenas ferramentas que realizem uma única tarefa muito bem e permitir que elas sejam combinadas para resolver problemas complexos.
+
+Essa filosofia influenciará todo o restante deste livro.
+
+Ao longo dos próximos capítulos, veremos como comandos aparentemente simples podem ser encadeados para automatizar investigações inteiras.
+
+---
+
+# 3.1 Por que utilizar Linux?
+
+Existem diversas razões pelas quais profissionais de Segurança da Informação, Forense Digital, DevOps e OSINT utilizam Linux como plataforma principal.
+
+Entre elas destacam-se:
+
+- grande quantidade de ferramentas disponíveis;
+- facilidade de automação;
+- excelente desempenho em servidores;
+- suporte a linguagens de script;
+- gerenciamento de pacotes;
+- estabilidade;
+- flexibilidade.
+
+Além disso, praticamente todas as ferramentas apresentadas neste livro poderão ser instaladas diretamente pelos gerenciadores de pacotes da distribuição.
+
+---
+
+# 3.2 A Filosofia Unix
+
+Para compreender o Linux, é importante conhecer alguns princípios herdados do Unix.
+
+Entre eles:
+
+## Faça uma única coisa muito bem.
+
+Cada programa deve resolver um problema específico.
+
+Exemplos:
+
+- grep → localizar padrões;
+- sort → ordenar linhas;
+- uniq → remover duplicidades;
+- cut → extrair colunas;
+- tr → substituir caracteres.
+
+Separadamente, esses programas parecem simples.
+
+Combinados, tornam-se extremamente poderosos.
+
+---
+
+## Tudo é um arquivo
+
+No Linux, praticamente tudo pode ser tratado como arquivo.
+
+Isso inclui:
+
+- arquivos comuns;
+- dispositivos;
+- discos;
+- terminais;
+- sockets;
+- pipes.
+
+Essa característica facilita enormemente a automação.
+
+---
+
+## Programas devem cooperar
+
+Em vez de criar aplicações gigantescas, o Unix incentiva que pequenos programas trabalhem juntos.
+
+Exemplo:
+
+```bash
+cat dominios.txt | sort | uniq
+```
+
+Cada comando realiza uma única função.
+
+O resultado de um é utilizado pelo próximo.
+
+Esse mecanismo é conhecido como **pipeline** e será utilizado constantemente ao longo deste livro.
+
+---
+
+# 3.3 Distribuições Linux
+
+Existem centenas de distribuições Linux.
+
+Neste livro utilizaremos principalmente:
+
+## Ubuntu
+
+Uma das distribuições mais populares.
+
+Indicada para:
+
+- iniciantes;
+- servidores;
+- desenvolvimento.
+
+---
+
+## Debian
+
+Reconhecida pela estabilidade.
+
+Muito utilizada em servidores.
+
+Grande parte das distribuições deriva do Debian.
+
+---
+
+## Kali Linux
+
+Especializada em Segurança da Informação.
+
+Possui centenas de ferramentas pré-instaladas.
+
+Apesar de sua popularidade, neste livro utilizaremos apenas ferramentas compatíveis com distribuições convencionais.
+
+Assim, os laboratórios poderão ser reproduzidos em Ubuntu, Debian e outras distribuições.
+
+---
+
+## Fedora
+
+Distribuição patrocinada pela Red Hat.
+
+Muito utilizada para desenvolvimento.
+
+---
+
+# 3.4 Estrutura de Diretórios
+
+Antes de iniciar a automação, é importante conhecer alguns diretórios.
+
+| Diretório | Finalidade |
+|------------|------------|
+| / | raiz do sistema |
+| /home | diretórios dos usuários |
+| /etc | arquivos de configuração |
+| /usr | programas instalados |
+| /var | logs e dados variáveis |
+| /tmp | arquivos temporários |
+| /opt | softwares opcionais |
+| /bin | comandos essenciais |
+| /sbin | administração do sistema |
+
+Durante o livro trabalharemos frequentemente com esses diretórios.
+
+---
+
+# 3.5 Terminal
+
+O terminal representa uma das maiores vantagens do Linux.
+
+Enquanto muitos sistemas dependem de interfaces gráficas, praticamente toda a administração de um sistema Linux pode ser realizada pela linha de comando.
+
+Essa característica permite:
+
+- automação;
+- execução remota;
+- criação de scripts;
+- integração entre ferramentas.
+
+---
+
+# 3.6 Ferramentas nativas importantes
+
+Algumas ferramentas serão utilizadas praticamente em todos os capítulos.
+
+| Ferramenta | Finalidade |
+|------------|------------|
+| grep | localizar padrões |
+| sed | editar textos |
+| awk | manipular colunas |
+| cut | extrair campos |
+| sort | ordenar |
+| uniq | remover duplicidades |
+| tr | substituir caracteres |
+| xargs | construir comandos |
+| find | localizar arquivos |
+| jq | manipular JSON |
+| curl | realizar requisições HTTP |
+| wget | download de arquivos |
+
+Nos próximos capítulos estudaremos cada uma delas detalhadamente.
+
+---
+
+# 3.7 Preparando o ambiente
+
+Nos laboratórios deste livro utilizaremos uma estrutura simples de trabalho.
+
+```text
+~/bashosint/
+
+├── scripts/
+├── reports/
+├── logs/
+├── cache/
+├── inputs/
+├── outputs/
+└── config/
+```
+
+Essa organização será mantida durante todo o projeto.
+
+---
+
+# Laboratório 1
+
+## Objetivo
+
+Preparar a estação de trabalho.
+
+Crie a estrutura de diretórios:
+
+```bash
+mkdir -p ~/bashosint/{scripts,reports,logs,cache,inputs,outputs,config}
+```
+
+Verifique o resultado:
+
+```bash
+tree ~/bashosint
+```
+
+Caso o comando `tree` não esteja instalado:
+
+Ubuntu/Debian:
+
+```bash
+sudo apt install tree
+```
+
+Fedora:
+
+```bash
+sudo dnf install tree
+```
+
+---
+
+# Resumo
+
+Neste capítulo compreendemos por que o Linux é a principal plataforma para atividades de OSINT. Conhecemos sua filosofia, as principais distribuições, a estrutura básica do sistema de arquivos e preparamos o ambiente que será utilizado ao longo do livro.
+
+Nos próximos capítulos começaremos a explorar o Bash e os conceitos fundamentais de Shell Script, que servirão como base para a automação das tarefas de coleta, processamento e análise de informações.
+
+---
+
+# Exercícios
+
+1. Explique a filosofia "Faça uma única coisa e faça bem".
+
+2. O que significa dizer que "tudo é um arquivo" no Linux?
+
+3. Qual a vantagem dos pipelines?
+
+4. Cite três distribuições Linux adequadas para atividades de OSINT.
+
+5. Qual a finalidade do diretório `/etc`?
+
+---
+
+# Desafio
+
+Pesquise outras distribuições Linux utilizadas em Segurança da Informação, como Parrot Security OS e BlackArch Linux.
+
+Compare suas características com Ubuntu, Debian e Kali Linux, destacando vantagens, desvantagens e possíveis cenários de uso.
+
+---
+
+# Conexão com o Projeto BashOSINT
+
+Neste capítulo iniciamos a estrutura do projeto.
+
+Criamos a árvore de diretórios que será utilizada durante todo o livro:
+
+```text
+bashosint/
+
+├── scripts/
+├── reports/
+├── logs/
+├── cache/
+├── inputs/
+├── outputs/
+└── config/
+```
+
+Nos próximos capítulos começaremos a preencher esses diretórios com scripts reutilizáveis, arquivos de configuração e relatórios gerados automaticamente, dando origem ao framework BashOSINT.
