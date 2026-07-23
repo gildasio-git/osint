@@ -882,4 +882,445 @@ bashosint/
 └── config/
 ```
 
-Nos próximos capítulos começaremos a preencher esses diretórios com scripts reutilizáveis, arquivos de configuração e relatórios gerados automaticamente, dando origem ao framework BashOSINT.
+# CAPÍTULO 4
+
+---
+title: "Shell Script para OSINT com Linux"
+subtitle: "Automação da Inteligência de Fontes Abertas utilizando Bash"
+volume: "Volume I - Fundamentos"
+chapter: 4
+chapter_title: "Bash para Analistas de Inteligência"
+author: "Gildásio Brito"
+version: "0.1"
+---
+
+# Capítulo 4
+
+# Bash para Analistas de Inteligência
+
+> "A automação começa quando deixamos de repetir comandos manualmente."
+
+---
+
+# Objetivos
+
+Ao concluir este capítulo, o leitor será capaz de:
+
+- compreender o papel do Bash na automação de tarefas de OSINT;
+- conhecer a estrutura básica de um script Shell;
+- entender o funcionamento do interpretador (Shell);
+- utilizar variáveis, comentários e permissões;
+- criar o primeiro script do projeto BashOSINT.
+
+---
+
+# Problema Real
+
+Imagine que você seja um analista de Segurança da Informação.
+
+Todos os dias, ao iniciar o expediente, você precisa executar a seguinte sequência de comandos:
+
+```bash
+date
+hostname
+whoami
+pwd
+ip addr
+```
+
+Depois copiar essas informações para um relatório.
+
+No primeiro dia isso leva poucos segundos.
+
+Após um mês, você terá executado a mesma sequência dezenas de vezes.
+
+Após um ano, centenas de vezes.
+
+A pergunta é simples:
+
+**Por que repetir uma tarefa que pode ser automatizada?**
+
+É exatamente para responder a esse tipo de necessidade que existe o Shell Script.
+
+---
+
+# 4.1 O que é um Shell?
+
+O Shell é um programa responsável por interpretar comandos enviados pelo usuário e solicitar ao sistema operacional que os execute.
+
+Em outras palavras, ele funciona como uma interface entre o usuário e o kernel do Linux.
+
+Fluxo simplificado:
+
+```text
+Usuário
+   │
+   ▼
+Shell (Bash)
+   │
+   ▼
+Kernel Linux
+   │
+   ▼
+Hardware
+```
+
+Sempre que digitamos um comando, ele é interpretado pelo Shell antes de ser executado.
+
+---
+
+# 4.2 O que é o Bash?
+
+O Bash (*Bourne Again SHell*) é o interpretador de comandos padrão da maioria das distribuições Linux.
+
+Além de permitir a execução de comandos interativos, ele possibilita a criação de scripts para automatizar tarefas repetitivas.
+
+O Bash oferece recursos como:
+
+- variáveis;
+- estruturas condicionais;
+- laços de repetição;
+- funções;
+- manipulação de arquivos;
+- redirecionamentos;
+- pipelines.
+
+Ao longo deste livro utilizaremos o Bash como linguagem principal para desenvolver o framework BashOSINT.
+
+---
+
+# 4.3 O primeiro Script
+
+Crie um arquivo chamado:
+
+```text
+hello.sh
+```
+
+Conteúdo:
+
+```bash
+#!/bin/bash
+
+echo "Olá, OSINT!"
+```
+
+Salve o arquivo.
+
+Agora conceda permissão de execução:
+
+```bash
+chmod +x hello.sh
+```
+
+Execute:
+
+```bash
+./hello.sh
+```
+
+Saída esperada:
+
+```text
+Olá, OSINT!
+```
+
+---
+
+# Entendendo o Script
+
+Primeira linha:
+
+```bash
+#!/bin/bash
+```
+
+Essa linha é chamada de **Shebang**.
+
+Ela informa ao sistema qual interpretador deverá executar o script.
+
+Sem ela, o comportamento poderá variar de acordo com o ambiente.
+
+---
+
+Segunda linha:
+
+```bash
+echo "Olá, OSINT!"
+```
+
+O comando `echo` envia uma mensagem para a saída padrão (terminal).
+
+Embora seja um exemplo simples, esse comando será utilizado frequentemente para exibir mensagens, registrar informações e gerar relatórios.
+
+---
+
+# 4.4 Comentários
+
+Comentários são utilizados para documentar o código.
+
+Exemplo:
+
+```bash
+#!/bin/bash
+
+# Primeiro script do livro
+
+echo "Bem-vindo ao BashOSINT"
+```
+
+Comentários são ignorados pelo interpretador.
+
+---
+
+# 4.5 Variáveis
+
+Variáveis armazenam informações que poderão ser utilizadas posteriormente.
+
+Exemplo:
+
+```bash
+#!/bin/bash
+
+NOME="Analista"
+
+echo "Bem-vindo, $NOME"
+```
+
+Saída:
+
+```text
+Bem-vindo, Analista
+```
+
+---
+
+Outro exemplo:
+
+```bash
+DATA=$(date)
+
+echo "$DATA"
+```
+
+O Bash executa o comando `date` e armazena seu resultado na variável `DATA`.
+
+---
+
+# 4.6 Variáveis de Ambiente
+
+O Linux possui diversas variáveis já disponíveis.
+
+Exemplos:
+
+```bash
+echo $HOME
+echo $USER
+echo $PATH
+echo $PWD
+echo $SHELL
+```
+
+Essas variáveis serão utilizadas constantemente durante a construção do framework.
+
+---
+
+# 4.7 Permissões
+
+Para executar um script é necessário conceder permissão.
+
+```bash
+chmod +x script.sh
+```
+
+Verifique:
+
+```bash
+ls -l script.sh
+```
+
+Saída:
+
+```text
+-rwxr-xr-x
+```
+
+O primeiro grupo refere-se ao proprietário do arquivo.
+
+Os demais representam grupo e outros usuários.
+
+---
+
+# Na Prática
+
+Nosso objetivo é evitar repetir comandos manualmente.
+
+Vamos automatizar a coleta de algumas informações do sistema.
+
+Crie o arquivo:
+
+```text
+system_info.sh
+```
+
+Conteúdo:
+
+```bash
+#!/bin/bash
+
+echo "=============================="
+echo "Informações do Sistema"
+echo "=============================="
+
+echo "Usuário : $USER"
+echo "Hostname: $(hostname)"
+echo "Data    : $(date)"
+echo "Kernel  : $(uname -r)"
+echo "Diretório Atual: $(pwd)"
+```
+
+Execute:
+
+```bash
+./system_info.sh
+```
+
+Esse será o primeiro script realmente útil do livro.
+
+---
+
+# Boas Práticas
+
+- Utilize nomes descritivos para variáveis.
+- Comente apenas quando necessário.
+- Organize o código em blocos.
+- Evite repetir comandos.
+- Sempre utilize o Shebang.
+
+---
+
+# Armadilhas Comuns
+
+❌ Esquecer de conceder permissão de execução.
+
+❌ Inserir espaços na atribuição de variáveis.
+
+Errado:
+
+```bash
+NOME = "João"
+```
+
+Correto:
+
+```bash
+NOME="João"
+```
+
+---
+
+# Laboratório 1
+
+Objetivo:
+
+Criar um script que apresente:
+
+- usuário;
+- data;
+- hostname;
+- versão do kernel;
+- tempo de atividade (`uptime`);
+- memória disponível (`free -h`).
+
+Salve esse script em:
+
+```text
+~/bashosint/scripts/
+```
+
+---
+
+# Conexão com o Projeto BashOSINT
+
+Neste capítulo nasce oficialmente o framework.
+
+Estrutura atual:
+
+```text
+bashosint/
+
+├── scripts/
+│   ├── hello.sh
+│   └── system_info.sh
+│
+├── reports/
+├── logs/
+├── cache/
+├── config/
+├── inputs/
+└── outputs/
+```
+
+Esses scripts serão utilizados como base para os módulos que construiremos ao longo do livro.
+
+---
+
+# Resumo
+
+Neste capítulo aprendemos:
+
+- o que é um Shell;
+- o que é o Bash;
+- como funciona um script;
+- o papel do Shebang;
+- variáveis;
+- comentários;
+- permissões de execução;
+- criação dos primeiros scripts.
+
+A partir do próximo capítulo iniciaremos o desenvolvimento de scripts mais robustos, incorporando estruturas condicionais, parâmetros de linha de comando e funções reutilizáveis.
+
+---
+
+# Exercícios
+
+1. Explique a função do Shebang.
+2. Qual a diferença entre uma variável criada pelo usuário e uma variável de ambiente?
+3. Por que um script precisa de permissão de execução?
+4. Escreva um script que exiba a data, o usuário e o diretório atual.
+5. Modifique o script `system_info.sh` para exibir também o espaço livre em disco (`df -h`).
+
+---
+
+# Desafio
+
+Desenvolva um script chamado `coleta_basica.sh` que gere um relatório contendo:
+
+- Data e hora;
+- Nome do host;
+- Usuário atual;
+- Kernel;
+- Interfaces de rede;
+- Espaço em disco;
+- Memória disponível.
+
+Salve o relatório no diretório:
+
+```text
+~/bashosint/reports/
+```
+
+Utilize um nome baseado na data, por exemplo:
+
+```text
+relatorio_2026-07-23.txt
+```
+
+Esse será o primeiro relatório automatizado do projeto BashOSINT.
+
+---
+
+# Próximo Capítulo
+
+## Capítulo 5 — Shell Script: Estruturas Fundamentais
+
